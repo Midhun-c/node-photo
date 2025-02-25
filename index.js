@@ -8,7 +8,8 @@ import cors from 'cors';
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
+
 
 app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 
