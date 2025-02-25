@@ -43,7 +43,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running at http://0.0.0.0:${PORT}`);
 });
