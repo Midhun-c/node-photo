@@ -5,6 +5,7 @@ import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
 
+
 dotenv.config();
 
 const app = express();
@@ -12,6 +13,11 @@ const PORT = 3000;
 
 app.use(cors());
 
+
+app.use(cors({
+  origin: 'https://midhun-c.github.io', // Replace with your GitHub Pages URL
+  methods: ['GET', 'POST'],
+}));
 const upload = multer({ storage: multer.memoryStorage() });
 
 const S3_KEY = process.env.FILEBASE_KEY;
