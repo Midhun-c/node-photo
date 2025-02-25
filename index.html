@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Capture & Upload to Filebase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        video, canvas, img {
+            max-width: 100%;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .share-buttons button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Capture & Upload Image to Filebase</h1>
+        <video id="video" autoplay></video>
+        <button id="capture-btn">Capture</button>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <img id="preview" style="display: none;"/>
+        <button id="upload-btn" style="display: none;">Upload to Filebase</button>
+        <div id="result" style="display: none;">
+            <h3>Image Uploaded!</h3>
+            <p>IPFS URL: <a id="filebase-url" target="_blank"></a></p>
+            <div class="share-buttons">
+                <button id="copy-btn">Copy URL</button>
+                <button id="whatsapp-btn">Share on WhatsApp</button>
+                <button id="linkedin-btn">Share on LinkedIn</button>
+                <button id="instagram-btn">Share on Instagram</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture-btn');
+        const uploadBtn = document.getElementById('upload-btn');
+        const preview = document.getElementById('preview');
+        const result = document.getElementById('result');
+        const filebaseUrl = document.getElementById('filebase-url');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(err => console.error("Camera access error:", err));
+
+        captureBtn.onclick = () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            preview.src = canvas.toDataURL('image/png');
+            preview.style.display = 'block';
+            uploadBtn.style.display = 'block';
+        };
+
+        uploadBtn.onclick = async () => {
+            const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            console.log("Image blob:", imageBlob); 
+            const formData = new FormData();
+            formData.append('file', imageBlob, 'capture.png');
+
+            try {
+                const response = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                
+                const ipfsUrl = `https://molecular-chocolate-tortoise.myfilebase.com/ipfs/${data.cid}`;
+                filebaseUrl.href = ipfsUrl;
+                filebaseUrl.textContent = ipfsUrl;
+                result.style.display = 'block';
+                console.log("hi");
+            } catch (error) {
+                console.error('Upload failed:', error);
+            }
+        };
+
+        document.getElementById('copy-btn').onclick = () => navigator.clipboard.writeText(filebaseUrl.href);
+        document.getElementById('whatsapp-btn').onclick = () => window.open(`https://api.whatsapp.com/send?text=${filebaseUrl.href}`);
+        document.getElementById('linkedin-btn').onclick = () => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${filebaseUrl.href}`);
+        document.getElementById('instagram-btn').onclick = () => alert('Instagram sharing requires app integration!');
+    </script>
+</body>
+</html>
