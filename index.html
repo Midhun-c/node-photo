@@ -94,8 +94,8 @@
             formData.append('file', imageBlob, 'capture.png');
 
             try {
-                const response = await fetch('http://localhost:3000/upload', {
-                    method: 'POST',
+               const response = await fetch('https://node-photo-production.up.railway.app/upload', {
+                   method: 'POST',
                     body: formData
                 });
                 const data = await response.json();
