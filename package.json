@@ -1,19 +1,17 @@
 {
-  "dependencies": {
-    "@filebase/sdk": "^1.0.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "multer": "^1.4.5-lts.1"
-  },
-  "name": "iupload",
+  "name": "filebase-uploader",
   "version": "1.0.0",
-  "main": "uploadi.js",
+  "description": "Image upload to Filebase with Express.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5",
+    "@filebase/sdk": "^1.0.0",
+    "dotenv": "^16.0.3",
+    "cors": "^2.8.5"
+  }
 }
