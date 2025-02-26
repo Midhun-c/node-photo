@@ -29,12 +29,17 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
+    console.log(`🚀 Server running 1`);
 
     const uploadedObject = await objectManager.upload(req.file.originalname, req.file.buffer);
+    
+ console.log(`🚀 Server running 2`);
 
     if (uploadedObject && uploadedObject.cid) {
       return res.json({ cid: uploadedObject.cid });
     } else {
+       console.log(`🚀 Server running 3`);
+      
       return res.status(500).json({ error: 'File upload failed' });
     }
   } catch (error) {
