@@ -94,8 +94,8 @@
             formData.append('file', imageBlob, 'capture.png');
 
             try {
-                const urle='https://node-photo.onrender.com/upload';
-                 console.log("url"+urle);
+                const urle='https://node-photo-production-5f08.up.railway.app/upload';
+                 console.log("url:   "+urle);
                 const response = await fetch(urle, {
                     method: 'POST',
                     body: formData
